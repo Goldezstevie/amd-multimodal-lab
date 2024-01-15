@@ -1,0 +1,41 @@
+# LLaVA LoRA Fine-tuning Configuration
+# Optimized for RX 7900 XTX (24GB VRAM) on ROCm
+
+model:
+  path: "liuhaotian/llava-v1.5-7b"
+  # use 13b if you have the VRAM:
+  # path: "liuhaotian/llava-v1.5-13b"
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "v_proj"
+    - "k_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  bias: "none"
+
+training:
+  data_path: "your-dataset-here"  # HF dataset or local jsonl
+  output_dir: "./outputs/llava-lora"
+  epochs: 3
+  batch_size: 4
+  gradient_accumulation: 4
+  lr: 0.0002
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  scheduler: "cosine"
+  logging_steps: 10
+  save_steps: 100
+  use_wandb: false
+
+# Notes:
+# - batch_size 4 + grad_accum 4 = effective batch of 16
+# - fp16 is hardcoded (ROCm handles this well)
+# - With 24GB VRAM, 7B model + LoRA fits comfortably
+# - For 13B, reduce batch_size to 2
