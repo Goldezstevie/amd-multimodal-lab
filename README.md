@@ -74,9 +74,26 @@ python src/vqa_model.py --image chart.png --question "What's the trend?"
 
 Check out [experiments/notes.md](experiments/notes.md) for my raw notes. It's messy but honest.
 
-## Why AMD?
+## Why AMD / ROCm
 
-Because competition is good, actually. Also the 7900 XTX has 24GB VRAM for like half the price of a 4090. ROCm has gotten *way* better in the last year. Not gonna pretend it's as smooth as CUDA yet, but we're getting there.
+Vision-language models (LLaVA, BLIP-2, CLIP) are at the frontier of multimodal AI, but nearly all benchmarks and guides assume NVIDIA hardware. This project proves that these models run effectively on AMD GPUs using ROCm. The 7900 XTX's 24GB VRAM is a key advantage:
+
+- VLMs like LLaVA-7B fit comfortably in 24GB at fp16, enabling real-time image understanding
+- CLIP embeddings for image-text retrieval run fast on AMD's RDNA3 architecture
+- ROCm 6.x provides mature support for the transformer attention operations that VLMs rely on
+- Cost per GB of VRAM favors AMD for hobbyist and research workloads
+- Testing multimodal pipelines on ROCm helps identify and fix CUDA-only assumptions in the ecosystem
+
+## AMD GPU Credit Use Plan
+
+If granted AMD GPU access, I plan to:
+
+1. Validate LLaVA, CLIP, and BLIP-2 inference on ROCm-compatible GPUs (MI300, RX 7900 XTX)
+2. Benchmark inference throughput (images/sec, tokens/sec) on AMD vs CPU
+3. Test fp16 memory usage for VLM inference — find optimal batch sizes
+4. Compare LLaVA LoRA fine-tuning performance across GPU memory tiers
+5. Document ROCm-specific issues with attention backends and xformers alternatives
+6. Publish ROCm compatibility notes and benchmark results back to this repository
 
 ## Contributing
 
