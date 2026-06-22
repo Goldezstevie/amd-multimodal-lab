@@ -36,3 +36,8 @@ python vlm_lab.py caption screenshot.png
 
 - `examples/screenshot_qa.md` -- Q&A on app screenshots
 - `examples/image_caption_output.md` -- captioning different image types
+
+
+## Troubleshooting
+**Q: Getting OOM errors?**
+A: Reduce batch size or enable gradient checkpointing.
